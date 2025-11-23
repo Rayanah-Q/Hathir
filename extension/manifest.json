@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "Trust Scan",
+    "version": "1.0",
+    "description": "Scans websites for phishing threats.",
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage",
+        "scripting",
+        "webNavigation"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "action": {
+        "default_title": "Trust Scan",
+        "default_popup": "src/popup.html",
+        "default_icon": {
+            "16": "src/assets/scan16.png",
+            "32": "src/assets/scan32.png",
+            "48": "src/assets/scan48.png",
+            "128": "src/assets/scan128.png"
+        },
+        "theme_icons": [
+            {
+                "light": "src/assets/scan32.png",
+                "dark": "src/assets/scanDark32.png",
+                "size": 32
+            },
+            {
+                "light": "src/assets/scan16.png",
+                "dark": "src/assets/scanDark16.png",
+                "size": 16
+            }
+        ]
+    },
+    "default_popup":"popup.html"
+
+}
