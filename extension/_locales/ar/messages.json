@@ -1,0 +1,18 @@
+{
+    "title": {
+        "message": "حاذِر",
+        "description": "Pop up heading"
+    },
+    "text": {
+        "message": "إنساني, لكن ماراح انساك",
+        "description": "Instruction text"
+    },
+    "prompt": {
+        "message": "شاك بأمان هذه الصفحة؟",
+        "description": "Prompt text"
+    },
+    "actionButton": {
+        "message": "إفحصها!",
+        "description": "Button text"
+    }
+}
