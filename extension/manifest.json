@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Haather",
+    "name": "Hathir",
     "version": "1.0",
     "description": "اضافة تضمن لك امانك اثناء تصفح المواقع الحكومية, حملها وانساها, لكن هي ماراح تنساك! بتنبهك اذا كان عليك خطر.",
     "default_locale": "en",
@@ -11,7 +11,7 @@
         "128": "src/assets/scan128.png"
     },
     "action": {
-        "default_title": "Haather",
+        "default_title": "Hathir",
         "default_popup": "src/popup.html",
         "theme_icons": [
             {   

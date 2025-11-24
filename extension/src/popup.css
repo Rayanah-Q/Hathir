@@ -1,19 +1,51 @@
 body {
-    width: 300px;
-    height: 400px;
     display: flex;
     overflow: hidden;
     justify-content: center;
     align-items: center;
     border-radius: 5;
-    margin: 0;
+    margin: 5;
     padding:0;
-    background: rgb(208, 208, 188);
+    background: #F5F1DC;
+;
 }
 .container {
+    width: 300px;
     text-align: center;
     padding: 20px;
-    background-color: #34420e;
+    background-color: #0046FF;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+}
+#title {
+    color: #FF9013;
+        font-size: 24px;
+        font-family: 'Times New Roman', Times, serif;
+}
+html [lang="ar"] #title {
+    font-family: 'Times New Roman', Times, serif;
+}
+html [lang="en"] #title {
+    font-family: 'Times New Roman', Times, serif;
+}
+#text {
+    color: #F5F1DC;
+    font-size: 18px;
+    margin-top: 10px;
+}
+#prompt {
+    color: #73C8D2;
+    font-size: 14px;
+    margin-top: 15px;
+}
+#actionButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #FF9013;
+    background-color: #F5F1DC;
+    border: 3px solid #FF9013;
+    border-radius: 15px;
+    cursor: pointer;
 }
