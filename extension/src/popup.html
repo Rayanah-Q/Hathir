@@ -9,13 +9,20 @@
 </head>
 
 <body>
-        <div class="container">
-            <h1 id="title"></h1>
-            <h2 id="text"></h2>
-            <p id ="prompt"></p>
-            <button id="actionButton"></button>
-        </div>
+    <div id="container" class="reveal">
+        <h1 id="title"></h1>
+        <h2 id="text"></h2>
+        <p id ="prompt"></p>
+        <button class="btn" id="actionButton"></button>
+    </div>
+    <div id="results" class="hidden">
+        <h2 id="resultTitle"></h2>
+        <p id="resultTextSafe"></p>
+        <p id="resultTextUnsafe" class="unsafeHidden"></p>
+        <button id="unsafeExitButton" class="btn" class="unsafeHidden"></button>
+        <button id="exitButton" class="btn"></button>
+    </div>
     <script src="popup.js"></script>
-    </body>
+</body>
 </html>
     

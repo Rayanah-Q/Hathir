@@ -14,5 +14,25 @@
     "actionButton": {
         "message": "إفحصها!",
         "description": "Button text"
+    },
+    "resultTitle" : {
+        "message": "اكتمل الفحص",
+        "description": "Result title text"
+    },
+    "resultTextSafe" : {
+        "message": "تبدو هذه الصفحة آمنة.",
+        "description": "Result text for safe page"
+    },
+    "resultTextUnsafe" : {
+        "message": "تحذير: قد تكون هذه الصفحة غير آمنة!",
+        "description": "Result text for unsafe page"
+    },
+    "exitButton" : {
+        "message": "إغلاق",
+        "description": "Exit button text"
+    },
+    "unsafeExitButton" : {
+        "message": "اترك الصفحة",
+        "description": "Unsafe exit button text"
     }
 }

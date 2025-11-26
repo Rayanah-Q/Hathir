@@ -16,13 +16,13 @@
         "theme_icons": [
             {   
                 "size": 16,
-                "light": "extension/src/assets/scanDark16.png",
+                "light": "src/assets/scan16.png",
                 "dark": "src/assets/scanDark16.png"
             },
             {
                 "size": 32,
                 "light": "src/assets/scan32.png",
-                "dark": "extension/src/assets/scanDark32.png.png"
+                "dark": "src/assets/scanDark32.png"
             }
         ]
     },

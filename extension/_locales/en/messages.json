@@ -14,5 +14,25 @@
     "actionButton": {
         "message": "Scan it!",
         "description": "Button text"
+    },
+    "resultTitle" : {
+        "message": "Scan Complete",
+        "description": "Result title text"
+    },
+    "resultTextSafe" : {
+        "message": "This page appears to be safe.",
+        "description": "Result text for safe page"
+    },
+    "resultTextUnsafe" : {
+        "message": "Warning: This page may be unsafe!",
+        "description": "Result text for unsafe page"
+    },
+    "exitButton" : {
+        "message": "Close",
+        "description": "Exit button text"
+    },
+    "unsafeExitButton" : {
+        "message": "Leave Page",
+        "description": "Unsafe exit button text"
     }
 }
