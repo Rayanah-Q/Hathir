@@ -11,23 +11,16 @@ CORS (app)
 import requests
 from bs4 import BeautifulSoup
 import tldextract
-# ===========================================
-#  تحميل المواقع الموثوقة
-# ===========================================
+
 def load_trusted_websites(path="trusted_websites.txt"):
     if not os.path.exists(path):
         return []
     with open(path, "r") as f:
         return [line.strip() for line in f if line.strip()]
 
-# ===========================================
-#  تجهيز Flask
-# ===========================================
+
 app = Flask(__name__)
 
-# ===========================================
-#  فتح الموقع وجلب HTML
-# ===========================================
 def fetch_site(url):
     try:
         resp = requests.get(url, timeout=10)
@@ -40,9 +33,7 @@ def fetch_site(url):
     except Exception as e:
         return {"reachable": False, "error": str(e)}
 
-# ===========================================
-#  استخراج معلومات HTML
-# ===========================================
+
 def analyze_html(html):
     soup = BeautifulSoup(html, "html.parser")
 
@@ -54,9 +45,7 @@ def analyze_html(html):
         "scripts": [s.get("src") for s in soup.find_all("script") if s.get("src")]
     }
 
-# ===========================================
-#  استخراج معلومات SSL
-# ===========================================
+
 def get_ssl_info(url):
     try:
         hostname = urlparse(url).hostname
@@ -75,9 +64,7 @@ def get_ssl_info(url):
     except Exception as e:
         return {"error": str(e)}
 
-# ===========================================
-#  مقارنة موقعين
-# ===========================================
+
 def compare_sites(siteA, siteB):
     score = 0
     checks = {}
@@ -106,9 +93,7 @@ def compare_sites(siteA, siteB):
         "checks": checks
     }
 
-# ===========================================
-#  الـ API الرئيسي
-# ===========================================
+
 @app.route("/check", methods=["POST"])
 def check_site():
     data = request.get_json()
@@ -119,7 +104,7 @@ def check_site():
 
     trusted_sites = load_trusted_websites()
 
-    # ---- فحص الموقع اللي أرسلته الاكستنشن ----
+    
     print(f"Checking: {url}")
     target_data = fetch_site(url)
     if not target_data["reachable"]:
@@ -128,7 +113,7 @@ def check_site():
     target_data["html_info"] = analyze_html(target_data["html"])
     target_data["ssl"] = get_ssl_info(url)
 
-    # ---- فحص المواقع الموثوقة ----
+    
     comparisons = []
 
     for trusted in trusted_sites:
@@ -153,8 +138,6 @@ def check_site():
         "comparisons": comparisons
     })
 
-# ===========================================
-# تشغيل السيرفر
-# ===========================================
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
