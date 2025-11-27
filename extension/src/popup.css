@@ -4,7 +4,22 @@ body {
     justify-content: center;
    color: #F5F1DC;
 }
-#container {
+body.arabic-font {
+  font-family: "Noto Kufi Arabic", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+body.default-font {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: medium;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 200;
+}
+div{
     width: auto;
     height: auto;
     opacity: 0;
@@ -16,68 +31,48 @@ body {
     justify-items: center;
     text-align: center;
     overflow: hidden;
-    background: #0046FF;
+    background: #F5F1DC;
+    box-shadow: 0 4px 30px #676453;
     transform-origin: center;
     transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
 }
 #container.reveal {
     animation: revealAnimation 0.6s ease forwards;
 }
+#results.reveal {
+    animation: revealAnimation 0.5s ease forwards;
+}
 @keyframes revealAnimation {
-    0% {
-        width: 200px;
+    0% {width: 200px;
         height: 2px;
-        opacity: 0.5;
-    }
-    100% {
-        width: 200px;
-        height: 210px;
-        opacity: 1;
-    }
-}
-
-#result {
-    margin-top: 15px;
-    font-size: 16px;
-    color: #F5F1DC;
-    border-radius: 12px;
-    padding: 10px;
-    animation:slideIn 0.5s ease forwards;
-}
-@keyframes slideIn {
-    0% {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
+        opacity: 0.5;}
+    100% {width: 200px;
+        height: 220px;
+        opacity: 1;}
 }
 #title {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 4px;
     color: #FF9013;
-        font-size: 26px;
+}
+h1 {
+    color: #FF9013;
+        font-size: 20px;
         font-weight: bold;
-        font-family: 'Times New Roman', Times, serif;
 }
-html [lang="ar"] #title {
-    font-family: inherit;
+h2 {
+    color: #0046FF;
+    font-size: 15px;
 }
-html [lang="en"] #title {
-    font-family: 'Times New Roman', Times, serif;
-}
-#text {
-    color: #F5F1DC;
-    font-size: 18px;
-    margin-top: 10px;
-}
-#prompt {
+p {
     color: #73C8D2;
-    font-size: 14px;
-    margin-top: 15px;
+    font-size: 16px;
+    margin: 13px;
 }
 .btn {
   position: relative;
+  margin: 10px auto 0 auto;
   font-size: 14px;
   text-transform: uppercase;
   text-decoration: none;
@@ -89,8 +84,8 @@ html [lang="en"] #title {
   border: none;
   font-family: inherit;
   font-weight: 500;
-  color: #FF9013;
-  background-color: #F5F1DC;
+  color: #F5F1DC;
+  background-color: #0046FF;
 }
 .btn:hover {
   transform: translateY(-3px);
@@ -98,8 +93,8 @@ html [lang="en"] #title {
 }
 .btn:active {
   transform: translateY(-1px);
-  color: #F5F1DC;
-  background-color: #73C8D2;
+  color: #0046FF;
+  background-color: #FF9013;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 .btn::after {
@@ -113,20 +108,10 @@ html [lang="en"] #title {
   left: 0;
   z-index: -1;
   transition: all 0.4s;
-}
-.btn::after {
-  background-color: #F5F1DC;
+    background-color: #0046FF;
 }
 .btn:hover::after {
   transform: scaleX(1.2) scaleY(1.3);
   opacity: 0;
 }
-.hidden {
-    display: none;
-}
-.unsafeHidden {
-    display: none !important;
-}
-button#unsafeExitButton.unsafeHidden {
-    display: none !important;
-}
+.hidden, .btn.hidden {display: none !important;}

@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extension Popup</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fustat:wght@800&family=Noto+Kufi+Arabic&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+    </style>
     <link rel="stylesheet" href="popup.css">
-    
 </head>
 
 <body>
@@ -16,10 +18,10 @@
         <button class="btn" id="actionButton"></button>
     </div>
     <div id="results" class="hidden">
-        <h2 id="resultTitle"></h2>
-        <p id="resultTextSafe"></p>
-        <p id="resultTextUnsafe" class="unsafeHidden"></p>
-        <button id="unsafeExitButton" class="btn" class="unsafeHidden"></button>
+        <p id="resultTitle"></p>
+        <h1 id="resultTextSafe"></h1>
+        <h1 id="resultTextUnsafe" class="hidden"></h1>
+        <button id="unsafeExitButton" class="btn" class="hidden"></button>
         <button id="exitButton" class="btn"></button>
     </div>
     <script src="popup.js"></script>
