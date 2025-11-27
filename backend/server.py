@@ -5,6 +5,9 @@ import socket
 from urllib.parse import urlparse
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+app = Flask (__name__)
+CORS (app)
 import requests
 from bs4 import BeautifulSoup
 import tldextract
@@ -153,5 +156,5 @@ def check_site():
 # ===========================================
 # تشغيل السيرفر
 # ===========================================
-if __name__ == "_main_":
+if __name__ == "__main__":
     app.run(port=5000, debug=True)
