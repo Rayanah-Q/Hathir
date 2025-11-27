@@ -25,16 +25,28 @@ if (navigator.language.startsWith ("ar")){
 
 // switch pop up pages
 var button = document.getElementById("actionButton");
-button.addEventListener("click", function() {
+button.addEventListener("click", () => {
     document.getElementById("container").classList.add("hidden");
     document.getElementById("results").classList.remove("hidden");
     document.getElementById("results").classList.add("reveal");
-     
-    //Simulate safety check (replace with actual logic)
-    var isSafe = Math.random() < 0.5; // Randomly decide safe or unsafe
-    if (!isSafe) {
-        showUnsafeMessage();
-    }});
+    
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        const currentURL = tabs[0].url;
+
+    fetch ("http://127.0.0.1:5000/check", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({url: currentURL})
+    })
+    .then (res => res.json())
+    .then (data => {
+        document.getElementById("resultTitle").textContent = JSON.stringify(data, null, 2);
+    })
+    .catch (err =>{
+        document.getElementById("resultTitle").textContent = "ERROR: "+ err;
+        });
+    });
+});
 
 // replace the hidden class between safe &unsafe pop ups
 function showUnsafeMessage() {
