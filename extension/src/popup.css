@@ -1,54 +1,65 @@
-body {
-    display: flex;
-    overflow: hidden;
-    justify-content: center;
-   color: #F5F1DC;
+html, body { 
+  margin: 0 ;
+  padding: 0 ; 
+  background: transparent !important;
 }
-body.arabic-font {
-  font-family: "Noto Kufi Arabic", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
+.glass {
+    width: 100%;
+    height: 100%;
+    padding: 18px;
+    box-sizing: border-box;
 }
-body.default-font {
-  font-family: "Roboto", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-size: medium;
-  font-style: normal;
-  font-variation-settings:
-    "wdth" 200;
+.hidden, .btn.hidden {display: none !important;}
+
+#container, #results {
+   border-radius: 16px;
+   padding: 20px;
+   box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.4);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px) brightness(1.0);
+  position: relative;
+  overflow: hidden;
+  animation: revealAnimation 0.6s ease forwards;
 }
-div{
-    width: auto;
-    height: auto;
-    opacity: 0;
-    padding: 25px;
-    margin: auto;
-    overflow: hidden;
-    border-radius: 12px;
-    align-items: center;
-    justify-items: center;
-    text-align: center;
-    overflow: hidden;
-    background: #F5F1DC;
-    box-shadow: 0 4px 30px #676453;
-    transform-origin: center;
-    transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+
+/* DARK THEME */
+@media (prefers-color-scheme: dark) {
+  .glass {
+    background: rgba(0, 0, 0, 0.764);
+    backdrop-filter: blur(20px) brightness(0.2);
+    -webkit-backdrop-filter: blur(20px) brightness(0.5);
+  }
+  #container, #results {
+    background: rgba(0, 0, 0, 0.192);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow:
+    0 0 25px rgba(0, 106, 255, 0.247),       /* outer blue glow */
+    inset 0 0 12px rgba(255, 255, 255, 0.2), /* inner glass shine */
+    inset 0 0 30px rgba(0, 0, 0, 0.3);       /* depth shadow */
+  }
 }
-#container.reveal {
-    animation: revealAnimation 0.6s ease forwards;
+/* LIGHT THEME */
+@media (prefers-color-scheme: light) {
+  .glass {
+    background: rgb(210, 196, 175);
+    backdrop-filter: blur(11px) brightness(1.4);
+    -webkit-backdrop-filter: blur(11px) brightness(1.1);
+  }
+  #container, #results {
+    background: rgba(255, 251, 245, 0.589);
+    border: 1px solid rgba(117, 109, 97, 0.332);
+      box-shadow:
+    0 0 30px rgba(0, 106, 255, 0.11),            /* outer blue glow */
+    inset 0 0 12px rgba(249, 234, 221, 0.62),   /* inner glass shine */
+    inset 0 0 30px rgba(255, 251, 229, 0.675);   /* depth shadow */
+  }
 }
-#results.reveal {
-    animation: revealAnimation 0.5s ease forwards;
-}
+
 @keyframes revealAnimation {
     0% {width: 200px;
-        height: 2px;
-        opacity: 0.5;}
+        height: 2px;}
     100% {width: 200px;
-        height: 220px;
-        opacity: 1;}
+        height: 100%;}
 }
 #title {
     font-size: 26px;
@@ -60,6 +71,7 @@ h1 {
     color: #FF9013;
         font-size: 20px;
         font-weight: bold;
+        text-align: center;
 }
 h2 {
     color: #0046FF;
@@ -68,7 +80,6 @@ h2 {
 p {
     color: #73C8D2;
     font-size: 16px;
-    margin: 13px;
 }
 .btn {
   position: relative;
@@ -76,8 +87,8 @@ p {
   font-size: 14px;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 1em 1.5em;
-  display: inline-block;
+  padding: 0.8em 1.5em;
+  display: flex;
   cursor: pointer;
   border-radius: 6em;
   transition: all 0.2s;
@@ -89,13 +100,13 @@ p {
 }
 .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 7px 13px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 9px 15px rgba(0, 0, 0, 0.35);
 }
-.btn:active {
+.btn:focus{
   transform: translateY(-1px);
   color: #0046FF;
   background-color: #FF9013;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
 }
 .btn::after {
   content: "";
@@ -114,4 +125,19 @@ p {
   transform: scaleX(1.2) scaleY(1.3);
   opacity: 0;
 }
-.hidden, .btn.hidden {display: none !important;}
+
+body.arabic-font {
+  font-family: "Noto Kufi Arabic", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+body.default-font {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: medium;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 200;
+}
