@@ -95,6 +95,6 @@ def check_site():
         "comparisons": [{"trusted": site, "match": domain in site} for site in trusted_sites]
     })
 
-# إذا عندك /test تبقى هنا، أو if __name__ مباشرة
+#  
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000, debug=True)
