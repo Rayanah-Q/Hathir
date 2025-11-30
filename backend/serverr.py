@@ -1,5 +1,4 @@
 import os
-import json
 import ssl
 import socket
 from urllib.parse import urlparse
@@ -7,94 +6,142 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
-import tldextract
 
 app = Flask(__name__)
 CORS(app)
 
+# ----------------------------------------------------
+#  Load trusted websites
+# ----------------------------------------------------
 def load_trusted_websites(path="trusted_websites.txt"):
     if not os.path.exists(path):
         return []
     with open(path, "r") as f:
         return [line.strip() for line in f if line.strip()]
 
-def fetch_site(url):
-    try:
-        resp = requests.get(url, timeout=10)
-        return {
-            "reachable": True,
-            "status_code": resp.status_code,
-            "html": resp.text,
-            "headers": dict(resp.headers)
-        }
-    except Exception as e:
-        return {"reachable": False, "error": str(e)}
 
-def analyze_html(html):
+# ----------------------------------------------------
+#  Fetch website HTML
+# ----------------------------------------------------
+def fetch_html(url):
+    try:
+        r = requests.get(url, timeout=8)
+        return r.text
+    except:
+        return ""
+
+
+# ----------------------------------------------------
+#  Extract simple HTML fingerprint
+# ----------------------------------------------------
+def fingerprint_html(html):
     soup = BeautifulSoup(html, "html.parser")
+
+    title = soup.title.string.strip() if soup.title else ""
+    meta_desc = ""
+    m = soup.find("meta", {"name": "description"})
+    if m:
+        meta_desc = m.get("content", "")
+
+    total_links = len(soup.find_all("a"))
+    total_scripts = len(soup.find_all("script"))
+
     return {
-        "title": soup.title.string.strip() if soup.title else "",
-        "meta_description": soup.find("meta", {"name": "description"}).get("content") 
-                            if soup.find("meta", {"name": "description"}) else "",
-        "links": [a.get("href") for a in soup.find_all("a") if a.get("href")],
-        "scripts": [s.get("src") for s in soup.find_all("script") if s.get("src")]
+        "title": title,
+        "meta": meta_desc,
+        "links": total_links,
+        "scripts": total_scripts,
     }
 
-def get_ssl_info(url):
+
+# ----------------------------------------------------
+#  Extract SSL certificate info
+# ----------------------------------------------------
+def get_ssl_issuer(url):
     try:
         hostname = urlparse(url).hostname
         ctx = ssl.create_default_context()
-        with socket.create_connection((hostname, 443)) as sock:
+
+        with socket.create_connection((hostname, 443), timeout=5) as sock:
             with ctx.wrap_socket(sock, server_hostname=hostname) as ssock:
                 cert = ssock.getpeercert()
-        return {
-            "issuer": dict(x[0] for x in cert.get("issuer", [])),
-            "subject": dict(x[0] for x in cert.get("subject", [])),
-            "notBefore": cert.get("notBefore"),
-            "notAfter": cert.get("notAfter")
-        }
-    except Exception as e:
-        return {"error": str(e)}
 
-def compare_sites(siteA, siteB):
+        return cert.get("issuer", [])
+    except:
+        return []
+
+
+# ----------------------------------------------------
+#  Compare two fingerprints
+# ----------------------------------------------------
+def compare_fingerprints(target, trusted):
     score = 0
-    checks = {}
-    checks["title_match"] = siteA["html_info"]["title"] == siteB["html_info"]["title"]
-    if checks["title_match"]: score += 1
-    checks["meta_desc_match"] = siteA["html_info"]["meta_description"] == siteB["html_info"]["meta_description"]
-    if checks["meta_desc_match"]: score += 1
-    checks["scripts_similarity"] = abs(len(siteA["html_info"]["scripts"]) - len(siteB["html_info"]["scripts"])) <= 3
-    if checks["scripts_similarity"]: score += 1
-    checks["ssl_issuer_match"] = (siteA["ssl"].get("issuer") == siteB["ssl"].get("issuer"))
-    if checks["ssl_issuer_match"]: score += 1
-    return {
-        "score": score,
-        "match_percentage": (score / 4) * 100,
-        "checks": checks
-    }
+    total = 4  # ← عدد الفحوص
 
- 
+    if target["title"] == trusted["title"]:
+        score += 1
 
+    if target["meta"] == trusted["meta"]:
+        score += 1
+
+    if abs(target["links"] - trusted["links"]) <= 5:
+        score += 1
+
+    if target["issuer"] == trusted["issuer"]:
+        score += 1
+
+    percentage = (score / total) * 100
+    return round(percentage, 2)
+
+
+# ----------------------------------------------------
+# API: /check
+# ----------------------------------------------------
 @app.route("/check", methods=["POST"])
 def check_site():
+
     data = request.get_json()
     url = data.get("url", "")
-    
+
     if not url:
         return jsonify({"error": "No URL provided"}), 400
-    
+
+    # Load trusted list
     trusted_sites = load_trusted_websites()
-    domain = url.replace("https://", "").replace("http://", "").split("/")[0]
-    is_trusted = any(domain in trusted for trusted in trusted_sites)
-    
+
+    # Gather fingerprint for visited site
+    html = fetch_html(url)
+    fp_target = fingerprint_html(html)
+    fp_target["issuer"] = get_ssl_issuer(url)
+
+    results = []
+
+    for site in trusted_sites:
+        html_trusted = fetch_html(site)
+        fp_trusted = fingerprint_html(html_trusted)
+        fp_trusted["issuer"] = get_ssl_issuer(site)
+
+        similarity = compare_fingerprints(fp_target, fp_trusted)
+
+        results.append({
+            "trusted_site": site,
+            "similarity": similarity
+        })
+
+    # highest similarity found
+    best_match = max(results, key=lambda x: x["similarity"]) if results else None
+    is_safe = best_match["similarity"] >= 90 if best_match else False
+
     return jsonify({
-        "input_url": url,
-        "domain": domain,
-        "is_trusted": is_trusted,
-        "trusted_sites": trusted_sites,
-        "comparisons": [{"trusted": site, "match": domain in site} for site in trusted_sites]
+        "url": url,
+        "is_safe": is_safe,
+        "best_match": best_match,
+        "all_results": results
     })
 
-#  
+
+# ----------------------------------------------------
+# Run server
+# ----------------------------------------------------
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)
