@@ -42,6 +42,9 @@ button.addEventListener("click", () => {
     .then (data => {
         document.getElementById("resultTitle").textContent = JSON.stringify(data, null, 2);
     })
+    .then (data => {
+        console.log("backend json data: ", data);
+    })
     .catch (err =>{
         document.getElementById("resultTitle").textContent = "ERROR: "+ err;
         });
