@@ -1,4 +1,5 @@
 # 🛡️ HATHIR
+
 ![Hackathon](https://img.shields.io/badge/Hackathon-Project-blueviolet?style=for-the-badge)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5](https://img.shields.io/badge/HTML5-orange)](https://developer.mozilla.org/en-US/docs/Web/HTML)
@@ -9,9 +10,12 @@
 
 
 ## Made by
-  **✨ CodeGuardians**
-  - 👩🏽‍💻 Rayanah Alqoblan
-  - 👩🏽‍💻 Fajr Almugri
+
+**✨ CodeGuardians**
+
+- 👩🏽‍💻 Rayanah Alqoblan
+- 👩🏽‍💻 Fajr Almugri
+
 ## 📌 Project Overview
 
 This project enables **extraction, analysis, and management of website data** using:
@@ -102,6 +106,7 @@ It is designed to handle both **public and secure (HTTPS) websites**, providing 
 ---
 
 ## 📊 UML Activity Diagram
+
 <img width="1300" height="1000" alt="Hathir-activityUML" src="https://github.com/user-attachments/assets/008b4744-8a0c-41c7-9e7b-8b122eda7a62" />
 
 

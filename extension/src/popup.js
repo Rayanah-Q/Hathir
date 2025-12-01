@@ -18,7 +18,6 @@ ids.forEach(id => {
     if (el) el.textContent = chrome.i18n.getMessage(id);
 });
 
-
 // -------------------------------------------
 // RTL / LTR SUPPORT
 // -------------------------------------------
@@ -31,7 +30,6 @@ if (navigator.language.startsWith("ar")) {
     document.body.style.textAlign = "left";
     document.body.classList.add("default-font");
 }
-
 
 // -------------------------------------------
 // CLICK → SCAN CURRENT PAGE
@@ -61,7 +59,6 @@ document.getElementById("actionButton").addEventListener("click", () => {
     });
 });
 
-
 // -------------------------------------------
 // HANDLE JSON FROM PYTHON
 // Uses: json.is_safe
@@ -82,7 +79,6 @@ function handleScanResult(json) {
     }
 }
 
-
 // -------------------------------------------
 // SHOW SAFE RESULT
 // -------------------------------------------
@@ -93,7 +89,6 @@ function showSafeMessage() {
     document.getElementById("resultTextUnsafe").classList.add("hidden");
     document.getElementById("unsafeExitButton").classList.add("hidden");
 }
-
 
 // -------------------------------------------
 // SHOW UNSAFE RESULT
@@ -106,14 +101,12 @@ function showUnsafeMessage() {
     document.getElementById("exitButton").classList.add("hidden");
 }
 
-
 // -------------------------------------------
 // SAFE EXIT BUTTON
 // -------------------------------------------
 document.getElementById("exitButton").addEventListener("click", () => {
     window.close();
 });
-
 
 // -------------------------------------------
 // UNSAFE EXIT BUTTON → CLOSE TAB
