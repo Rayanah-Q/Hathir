@@ -98,8 +98,7 @@ def compare_fingerprints(target, trusted):
 # API: /check
 # ----------------------------------------------------
 @app.route("/check", methods=["POST"])
-def check_site():
-
+def check_site(): 
     data = request.get_json()
     url = data.get("url", "")
 

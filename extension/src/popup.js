@@ -1,19 +1,28 @@
-    const ids = [
-        "title",
-        "text",
-        "prompt",
-        "actionButton",
-        "resultTitle",
-        "resultTextSafe",
-        "resultTextUnsafe",
-        "exitButton",
-        "unsafeExitButton"
-    ];
-    ids.forEach (id => {
-        const el = document.getElementById(id);
-        el.textContent = chrome.i18n.getMessage(id);
-    });
-if (navigator.language.startsWith ("ar")){
+// -------------------------------------------
+// LOCALIZATION
+// -------------------------------------------
+const ids = [
+    "title",
+    "text",
+    "prompt",
+    "actionButton",
+    "resultTitle",
+    "resultTextSafe",
+    "resultTextUnsafe",
+    "exitButton",
+    "unsafeExitButton"
+];
+
+ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = chrome.i18n.getMessage(id);
+});
+
+
+// -------------------------------------------
+// RTL / LTR SUPPORT
+// -------------------------------------------
+if (navigator.language.startsWith("ar")) {
     document.body.dir = "rtl";
     document.body.style.textAlign = "right";
     document.body.classList.add("arabic-font");
@@ -23,54 +32,92 @@ if (navigator.language.startsWith ("ar")){
     document.body.classList.add("default-font");
 }
 
-// switch pop up pages
-var button = document.getElementById("actionButton");
-button.addEventListener("click", () => {
+
+// -------------------------------------------
+// CLICK → SCAN CURRENT PAGE
+// -------------------------------------------
+document.getElementById("actionButton").addEventListener("click", () => {
+
+    // Hide main screen, show results section
     document.getElementById("container").classList.add("hidden");
     document.getElementById("results").classList.remove("hidden");
     document.getElementById("results").classList.add("reveal");
-    
-    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const currentURL = tabs[0].url;
 
-    fetch ("http://localhost:8000/check", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({url: currentURL})
-    })
-    .then (res => res.json())
-    .then (data => {
-        document.getElementById("resultTitle").textContent = JSON.stringify(data, null, 2);
-    })
-    .then (data => {
-        console.log("backend json data: ", data);
-    })
-    .catch (err =>{
-        document.getElementById("resultTitle").textContent = "ERROR: "+ err;
-        });
+        chrome.runtime.sendMessage(
+            { type: "CHECK_URL", url: currentURL },
+            data => {
+                if (!data || data.error) {
+                    document.getElementById("resultTitle").textContent =
+                        "ERROR: " + (data?.error ?? "Unknown error");
+                    return;
+                }
+
+                handleScanResult(data); // Pass full JSON from Python
+            }
+        );
     });
 });
 
-// replace the hidden class between safe &unsafe pop ups
+
+// -------------------------------------------
+// HANDLE JSON FROM PYTHON
+// Uses: json.is_safe
+// -------------------------------------------
+function handleScanResult(json) {
+    const resultTitle = document.getElementById("resultTitle");
+
+    if (json.is_safe === true) {
+        showSafeMessage();
+    } else {
+
+        // Optionally show similarity details
+        if (json.best_match && json.best_match.similarity !== undefined) {
+            resultTitle.textContent += `\nSimilarity: ${json.best_match.similarity}%`;
+        }
+
+        showUnsafeMessage();
+    }
+}
+
+
+// -------------------------------------------
+// SHOW SAFE RESULT
+// -------------------------------------------
+function showSafeMessage() {
+    document.getElementById("resultTextSafe").classList.remove("hidden");
+    document.getElementById("exitButton").classList.remove("hidden");
+
+    document.getElementById("resultTextUnsafe").classList.add("hidden");
+    document.getElementById("unsafeExitButton").classList.add("hidden");
+}
+
+
+// -------------------------------------------
+// SHOW UNSAFE RESULT
+// -------------------------------------------
 function showUnsafeMessage() {
     document.getElementById("resultTextUnsafe").classList.remove("hidden");
     document.getElementById("unsafeExitButton").classList.remove("hidden");
+
     document.getElementById("resultTextSafe").classList.add("hidden");
     document.getElementById("exitButton").classList.add("hidden");
 }
 
-// exiting pop up window when page is safe
-var exitBtn = document.getElementById("exitButton");
-exitBtn.addEventListener("click", function() {
+
+// -------------------------------------------
+// SAFE EXIT BUTTON
+// -------------------------------------------
+document.getElementById("exitButton").addEventListener("click", () => {
     window.close();
 });
 
-// closing current tab function
-function closeCurrentTab() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.remove(tabs[0].id);
-    }
-);};
-// closing tab on click for unsafe case
-var unsafeExitBtn = document.getElementById("unsafeExitButton");
-unsafeExitBtn.addEventListener("click", closeCurrentTab);
+
+// -------------------------------------------
+// UNSAFE EXIT BUTTON → CLOSE TAB
+// -------------------------------------------
+document.getElementById("unsafeExitButton").addEventListener("click", () => {
+    chrome.runtime.sendMessage({ type: "CLOSE_TAB" });
+});
