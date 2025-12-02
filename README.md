@@ -16,15 +16,20 @@
 - 👩🏽‍💻 Rayanah Alqoblan
 - 👩🏽‍💻 Fajr Almugri
 
+Built for the **Absher Tuwaiq Hachathon** 🚀
+
 ## 📌 Project Overview
 
-This project enables **extraction, analysis, and management of website data** using:
+**Hathir** is a Chrome extension and backend system designed to extract, analyze, and manage website data.
+It processes both public and secure (HTTPS) websites and outputs structured, multilingual-ready JSON.
 
-- **Website content analysis** (HTML, URLs, meta tags, SSL certificates)  
-- **Chrome extension** for real-time data collection  
-- **Front-end interface** for visualization and dynamic updates  
+The system integrates:
 
-It is designed to handle both **public and secure (HTTPS) websites**, providing structured outputs in **JSON format** with **internationalization (i18n)** support.
+- Real-time data extraction from a Chrome extension
+- Back-end analysis & processing through Flask APIs
+- Dynamic front-end visualization
+- SSL certificate verification
+- AI powered advanced analysis
 
 ---
 
@@ -102,7 +107,7 @@ It is designed to handle both **public and secure (HTTPS) websites**, providing 
 4. **Analysis & Reporting**
    - Summarize website components and structure  
    - Generate readable reports for public or secure pages  
-
+ chrome
 ---
 
 ## 📊 UML Activity Diagram
