@@ -110,6 +110,6 @@ The system integrates:
 
 ---
 
-## 📊 UML Activity Diagram
+## 📊 Flowchart
 
-<img width="1300" height="1000" alt="Hathir-activityUML" src="https://github.com/user-attachments/assets/008b4744-8a0c-41c7-9e7b-8b122eda7a62" />
+![alt text](UML.png)
