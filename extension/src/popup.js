@@ -38,8 +38,8 @@ document.getElementById("actionButton").addEventListener("click", () => {
 
     // Hide main screen, show results section
     document.getElementById("container").classList.add("hidden");
-    document.getElementById("results").classList.remove("hidden");
-    document.getElementById("results").classList.add("reveal");
+    document.getElementById("loading").classList.remove("hidden");
+    document.getElementById("loading").classList.add("reveal");
 
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const currentURL = tabs[0].url;
@@ -83,22 +83,16 @@ function handleScanResult(json) {
 // SHOW SAFE RESULT
 // -------------------------------------------
 function showSafeMessage() {
-    document.getElementById("resultTextSafe").classList.remove("hidden");
-    document.getElementById("exitButton").classList.remove("hidden");
-
-    document.getElementById("resultTextUnsafe").classList.add("hidden");
-    document.getElementById("unsafeExitButton").classList.add("hidden");
+    document.getElementById("safe").classList.remove("hidden");
+    document.getElementById("safe").classList.add("hidden");
 }
 
 // -------------------------------------------
 // SHOW UNSAFE RESULT
 // -------------------------------------------
 function showUnsafeMessage() {
-    document.getElementById("resultTextUnsafe").classList.remove("hidden");
-    document.getElementById("unsafeExitButton").classList.remove("hidden");
-
-    document.getElementById("resultTextSafe").classList.add("hidden");
-    document.getElementById("exitButton").classList.add("hidden");
+    document.getElementById("unsafe").classList.remove("hidden");
+    document.getElementById("unsafe").classList.add("hidden");
 }
 
 // -------------------------------------------

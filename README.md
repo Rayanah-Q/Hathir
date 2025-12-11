@@ -8,15 +8,14 @@
 [![Flask](https://img.shields.io/badge/Flask-2.3-orange)](https://flask.palletsprojects.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-
 ## Made by
 
-**✨ CodeGuardians**
+### **✨ CodeGuardians**
 
 - 👩🏽‍💻 Rayanah Alqoblan
 - 👩🏽‍💻 Fajr Almugri
 
-Built for the **Absher Tuwaiq Hachathon** 🚀
+Built for the **Absher Tuwaiq Hackathon** 🚀
 
 ## 📌 Project Overview
 
@@ -108,10 +107,9 @@ The system integrates:
    - Summarize website components and structure  
    - Generate readable reports for public or secure pages  
  chrome
+
 ---
 
 ## 📊 UML Activity Diagram
 
 <img width="1300" height="1000" alt="Hathir-activityUML" src="https://github.com/user-attachments/assets/008b4744-8a0c-41c7-9e7b-8b122eda7a62" />
-
-
