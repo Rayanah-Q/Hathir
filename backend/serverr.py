@@ -7,7 +7,7 @@ from flask_cors import CORS
 import requests
 from bs4 import BeautifulSoup
 
-app = Flask(__name__)
+app = Flask(name)
 CORS(app)
 
 # ----------------------------------------------------
@@ -142,5 +142,5 @@ def check_site():
 # ----------------------------------------------------
 # Run server
 # ----------------------------------------------------
-if __name__ == "__main__":
+if name == "main":
     app.run(host="0.0.0.0", port=8000, debug=True)
