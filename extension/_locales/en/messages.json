@@ -15,8 +15,8 @@
         "message": "Scan it!",
         "description": "Button text"
     },
-    "resultTitle" : {
-        "message": "Scan Complete",
+    "loadingTitle" : {
+        "message": "Scan in progress...",
         "description": "Result title text"
     },
     "resultTextSafe" : {

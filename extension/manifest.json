@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Hathir",
-    "version": "1.0",
+    "version": "1.1",
     "description": "اضافة تضمن لك امانك اثناء تصفح المواقع الحكومية, حملها وانساها, لكن هي ماراح تنساك! بتنبهك اذا كان عليك خطر.",
     "default_locale": "en",
     "icons": {
@@ -9,9 +9,6 @@
         "32": "src/assets/scan32.png",
         "48": "src/assets/scan48.png",
         "128": "src/assets/scan128.png"
-    },
-    "background": {
-        "service_worker": "background.js"
     },
     "action": {
         "default_title": "Hathir",

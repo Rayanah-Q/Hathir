@@ -15,8 +15,8 @@
         "message": "إفحصها!",
         "description": "Button text"
     },
-    "resultTitle" : {
-        "message": "اكتمل الفحص",
+    "loadingTitle" : {
+        "message": "جار الفحص...",
         "description": "Result title text"
     },
     "resultTextSafe" : {

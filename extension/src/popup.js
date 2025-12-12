@@ -1,16 +1,45 @@
-// -------------------------------------------
-// LOCALIZATION
-// -------------------------------------------
+// ============================================================
+// MESSAGE LISTENER (BACKGROUND-LIKE LOGIC)
+// ============================================================
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+
+    // Scan URL
+    if (msg.type === "CHECK_URL") {
+
+        fetch("http://127.0.0.1:8000/check", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: msg.url })
+        })
+        .then(res => res.json())
+        .then(data => sendResponse(data))
+        .catch(err => sendResponse({ error: err.toString() }));
+
+        return true; // Keep channel open for async response
+    }
+
+    // Close tab
+    if (msg.type === "CLOSE_TAB") {
+        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+            chrome.tabs.remove(tabs[0].id);
+        });
+    }
+});
+
+
+// ============================================================
+// LOCALIZATION → MATCHES YOUR HTML ELEMENTS
+// ============================================================
 const ids = [
     "title",
     "text",
     "prompt",
     "actionButton",
-    "resultTitle",
     "resultTextSafe",
     "resultTextUnsafe",
     "exitButton",
-    "unsafeExitButton"
+    "unsafeExitButton",
+    "loadingtitle"
 ];
 
 ids.forEach(id => {
@@ -18,9 +47,10 @@ ids.forEach(id => {
     if (el) el.textContent = chrome.i18n.getMessage(id);
 });
 
-// -------------------------------------------
+
+// ============================================================
 // RTL / LTR SUPPORT
-// -------------------------------------------
+// ============================================================
 if (navigator.language.startsWith("ar")) {
     document.body.dir = "rtl";
     document.body.style.textAlign = "right";
@@ -31,15 +61,15 @@ if (navigator.language.startsWith("ar")) {
     document.body.classList.add("default-font");
 }
 
-// -------------------------------------------
-// CLICK → SCAN CURRENT PAGE
-// -------------------------------------------
+
+// ============================================================
+// CLICK → SCAN THE CURRENT PAGE
+// ============================================================
 document.getElementById("actionButton").addEventListener("click", () => {
 
-    // Hide main screen, show results section
+    // Hide main screen, show loading
     document.getElementById("container").classList.add("hidden");
     document.getElementById("loading").classList.remove("hidden");
-    document.getElementById("loading").classList.add("reveal");
 
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const currentURL = tabs[0].url;
@@ -48,63 +78,56 @@ document.getElementById("actionButton").addEventListener("click", () => {
             { type: "CHECK_URL", url: currentURL },
             data => {
                 if (!data || data.error) {
-                    document.getElementById("resultTitle").textContent =
+                    document.getElementById("loadingtitle").textContent =
                         "ERROR: " + (data?.error ?? "Unknown error");
                     return;
                 }
 
-                handleScanResult(data); // Pass full JSON from Python
+                handleScanResult(data);
             }
         );
     });
 });
 
-// -------------------------------------------
-// HANDLE JSON FROM PYTHON
-// Uses: json.is_safe
-// -------------------------------------------
+
+// ============================================================
+// HANDLE SCAN RESULT FROM PYTHON
+// ============================================================
 function handleScanResult(json) {
-    const resultTitle = document.getElementById("resultTitle");
+
+    document.getElementById("loading").classList.add("hidden");
 
     if (json.is_safe === true) {
         showSafeMessage();
     } else {
-
-        // Optionally show similarity details
-        if (json.best_match && json.best_match.similarity !== undefined) {
-            resultTitle.textContent += `\nSimilarity: ${json.best_match.similarity}%`;
-        }
-
         showUnsafeMessage();
     }
 }
 
-// -------------------------------------------
+
+// ============================================================
 // SHOW SAFE RESULT
-// -------------------------------------------
+// ============================================================
 function showSafeMessage() {
     document.getElementById("safe").classList.remove("hidden");
-    document.getElementById("safe").classList.add("hidden");
 }
 
-// -------------------------------------------
+
+// ============================================================
 // SHOW UNSAFE RESULT
-// -------------------------------------------
+// ============================================================
 function showUnsafeMessage() {
     document.getElementById("unsafe").classList.remove("hidden");
-    document.getElementById("unsafe").classList.add("hidden");
 }
 
-// -------------------------------------------
-// SAFE EXIT BUTTON
-// -------------------------------------------
+
+// ============================================================
+// BUTTONS
+// ============================================================
 document.getElementById("exitButton").addEventListener("click", () => {
     window.close();
 });
 
-// -------------------------------------------
-// UNSAFE EXIT BUTTON → CLOSE TAB
-// -------------------------------------------
 document.getElementById("unsafeExitButton").addEventListener("click", () => {
     chrome.runtime.sendMessage({ type: "CLOSE_TAB" });
 });
