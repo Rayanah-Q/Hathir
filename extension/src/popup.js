@@ -39,7 +39,7 @@ const ids = [
     "resultTextUnsafe",
     "exitButton",
     "unsafeExitButton",
-    "loadingtitle"
+    "loadingTitle"
 ];
 
 ids.forEach(id => {
@@ -70,6 +70,7 @@ document.getElementById("actionButton").addEventListener("click", () => {
     // Hide main screen, show loading
     document.getElementById("container").classList.add("hidden");
     document.getElementById("loading").classList.remove("hidden");
+    document.getElementById("loadingtitle").classList.add("reveal");
 
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const currentURL = tabs[0].url;
@@ -110,6 +111,7 @@ function handleScanResult(json) {
 // ============================================================
 function showSafeMessage() {
     document.getElementById("safe").classList.remove("hidden");
+    document.getElementById("resultTextSafe").classList.add("reveal");
 }
 
 
@@ -118,6 +120,7 @@ function showSafeMessage() {
 // ============================================================
 function showUnsafeMessage() {
     document.getElementById("unsafe").classList.remove("hidden");
+    document.getElementById("unsafe").classList.add("reveal");
 }
 
 
