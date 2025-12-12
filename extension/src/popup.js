@@ -1,33 +1,4 @@
 // ============================================================
-// MESSAGE LISTENER (BACKGROUND-LIKE LOGIC)
-// ============================================================
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-
-    // Scan URL
-    if (msg.type === "CHECK_URL") {
-
-        fetch("http://127.0.0.1:8000/check", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: msg.url })
-        })
-        .then(res => res.json())
-        .then(data => sendResponse(data))
-        .catch(err => sendResponse({ error: err.toString() }));
-
-        return true; // Keep channel open for async response
-    }
-
-    // Close tab
-    if (msg.type === "CLOSE_TAB") {
-        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-            chrome.tabs.remove(tabs[0].id);
-        });
-    }
-});
-
-
-// ============================================================
 // LOCALIZATION → MATCHES YOUR HTML ELEMENTS
 // ============================================================
 const ids = [
@@ -70,7 +41,7 @@ document.getElementById("actionButton").addEventListener("click", () => {
     // Hide main screen, show loading
     document.getElementById("container").classList.add("hidden");
     document.getElementById("loading").classList.remove("hidden");
-    document.getElementById("loadingtitle").classList.add("reveal");
+    document.getElementById("loading").classList.add("reveal");
 
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
         const currentURL = tabs[0].url;
@@ -79,7 +50,7 @@ document.getElementById("actionButton").addEventListener("click", () => {
             { type: "CHECK_URL", url: currentURL },
             data => {
                 if (!data || data.error) {
-                    document.getElementById("loadingtitle").textContent =
+                    document.getElementById("loadingTitle").textContent =
                         "ERROR: " + (data?.error ?? "Unknown error");
                     return;
                 }
@@ -111,7 +82,7 @@ function handleScanResult(json) {
 // ============================================================
 function showSafeMessage() {
     document.getElementById("safe").classList.remove("hidden");
-    document.getElementById("resultTextSafe").classList.add("reveal");
+    document.getElementById("safe").classList.add("reveal");
 }
 
 
@@ -133,4 +104,30 @@ document.getElementById("exitButton").addEventListener("click", () => {
 
 document.getElementById("unsafeExitButton").addEventListener("click", () => {
     chrome.runtime.sendMessage({ type: "CLOSE_TAB" });
+});
+// Fire the URL check immediately when popup opens
+window.addEventListener("DOMContentLoaded", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const url = tabs[0]?.url;
+        if (!url) return;
+
+        chrome.runtime.sendMessage(
+            { type: "CHECK_URL", url },
+            (response) => {
+                if (!response || response.error) {
+                    document.getElementById("resultTextUnsafe").textContent =
+                        "Backend connection error.";
+                    document.getElementById("unsafe").classList.remove("hidden");
+                    return;
+                }
+
+                // Handle backend result
+                if (response.status === "safe") {
+                    document.getElementById("safe").classList.remove("hidden");
+                    document.getElementById("loading").classList.add("hidden");
+                    document.getElementById("safe").classList.add("reveal");
+                }
+            }
+        );
+    });
 });
