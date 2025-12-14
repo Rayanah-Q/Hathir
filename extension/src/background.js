@@ -1,5 +1,15 @@
+chrome.runtime.onMessage.addListener((message, sender) => {
+    if (message.type === "CLOSE_TAB") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0]?.id) {
+                chrome.tabs.remove(tabs[0].id);
+            }
+        });
+    }
+});
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.type === "CHECK_URL") {
+
+        if (msg.type === "CHECK_URL") {
         fetch("http://127.0.0.1:8000/check", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -9,10 +19,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         .then(sendResponse)
         .catch(err => sendResponse({ error: err.toString() }));
 
+
         return true; // keeps message channel alive for async response
     }
-
-    if (msg.type === "CLOSE_TAB") {
-        chrome.tabs.remove(sender.tab.id);
-    }
+    
 });

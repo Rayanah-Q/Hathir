@@ -21,6 +21,36 @@ html, body {
   overflow: hidden;
   animation: revealAnimation 0.6s ease forwards;
 }
+#loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;}
+  /* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid  #0046FF;
+  animation:
+    l20-1 0.8s infinite linear alternate,
+    l20-2 1.6s infinite linear;
+}
+@keyframes l20-1{
+   0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
+   12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
+   25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
+   50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+   62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+   75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
+   100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
+}
+@keyframes l20-2{ 
+  0%    {transform:scaleY(1)  rotate(0deg)}
+  49.99%{transform:scaleY(1)  rotate(135deg)}
+  50%   {transform:scaleY(-1) rotate(0deg)}
+  100%  {transform:scaleY(-1) rotate(-135deg)}
+}
+
 
 /* DARK THEME */
 @media (prefers-color-scheme: dark) {
@@ -29,7 +59,7 @@ html, body {
     backdrop-filter: blur(1px) brightness(0.2);
     -webkit-backdrop-filter: blur(1px) brightness(0.2);
   }
-  #container, #results {
+  #container, #safe, #unsafe, #loading {
     background: rgba(0, 0, 0, 0.192);
     border: 1px solid rgba(255, 255, 255, 0.10);
       box-shadow:
@@ -45,13 +75,21 @@ html, body {
     backdrop-filter: blur(11px) brightness(1.4);
     -webkit-backdrop-filter: blur(11px) brightness(1.1);
   }
-  #container, #results {
+  #container, #safe, #loading {
     background: rgba(255, 251, 245, 0.589);
     border: 1px solid rgba(117, 109, 97, 0.332);
       box-shadow:
     0 0 30px rgba(0, 106, 255, 0.11),            /* outer blue glow */
     inset 0 0 12px rgba(221, 237, 249, 0.62),   /* inner glass shine */
     inset 0 0 30px rgba(229, 250, 255, 0.675);   /* depth shadow */
+  }
+  #unsafe{
+    background: rgba(255, 245, 245, 0.589);
+    border: 1px solid rgba(197, 109, 97, 0.332);
+      box-shadow:
+    0 0 30px rgba(255, 0, 0, 0.11),            /* outer red glow */
+    inset 0 0 12px rgba(249, 221, 221, 0.62),   /* inner glass shine */
+    inset 0 0 30px rgba(255, 229, 229, 0.675);   /* depth shadow */
   }
 }
 
@@ -72,6 +110,9 @@ h1 {
         font-size: 20px;
         font-weight: bold;
         text-align: center;
+}
+#resultTextUnsafe{
+  color : rgb(194, 81, 81);
 }
 h2 {
     color: #0046FF;
